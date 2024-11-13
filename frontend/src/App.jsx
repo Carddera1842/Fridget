@@ -1,19 +1,39 @@
-import React from 'react';
+// App.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { UserContainer } from './components/UserContainer';
-import AddIngredients from './components/AddIngredients';
-import AddRecipe from './components/AddRecipe';
-import IngredientsList from './components/IngredientsList';
-import SelectForm from './components/SelectForm';
-import Directions from './components/Directions';
+import { UserContainer } from "./components/UserContainer";
+import Ingredients from "./components/AddIngredients";
+import Recipe from "./components/AddRecipe";
+import IngredientsList from "./components/IngredientsList";
+import SelectForm from "./components/SelectForm";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import PasswordReset from "./components/PasswordReset";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar"; // Import the Navbar component
+import GroceryList from "./components/GroceryList";
 
 const App = () => {
   return (
-    <div className='container'>
-      <UserContainer />
-    </div>
+    <Router>
+      <div className="container">
+        <Navbar /> {/* Add Navbar above Routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/user-container" element={<UserContainer />} />
+          <Route path="/ingredients" element={<Ingredients />} />
+          <Route path="/recipe" element={<Recipe />} />
+          <Route path="/ingredients-list" element={<IngredientsList />} />
+          <Route path="/select-form" element={<SelectForm />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
+          <Route path="/grocery-list" element={<GroceryList />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
 export default App;
-
