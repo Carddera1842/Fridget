@@ -1,126 +1,223 @@
-import { useState } from "react";
-import styles from "../styles/Grocery.module.css";
+import React, { useState } from 'react';
+import '../styles/Lists.css';
 
-export default function GroceryList() {
-  const [items, setItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [heading, setHeading] = useState("My Grocery List");
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [user, setUser] = useState("");
+const initialLists = [
+  {
+    name: 'Weekly Chores',
+    icon: '/icons/broom.png',
+    itemCount: 2,
+    color: '#ffe8a1',
+    items: [
+      { text: 'Sweep floor', done: false },
+      { text: 'Take out trash', done: true },
+    ],
+  },
+  {
+    name: 'Meal Prep',
+    icon: '/icons/meal.png',
+    itemCount: 5,
+    color: '#d4f5a1',
+    items: [
+      { text: 'Chop onions', done: true },
+      { text: 'Boil rice', done: false },
+      { text: 'Grill chicken', done: false },
+      { text: 'Wash veggies', done: true },
+      { text: 'Pack containers', done: false },
+    ],
+  },
+];
 
-  //Gets the user so we can assign them as the author.
-  const getUser = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/userservice/current-user", {
-        method: "GET",
-        credentials: "include", // Ensures session cookies are sent
+export default function ListsPage() {
+  const [lists, setLists] = useState(initialLists);
+  const [showModal, setShowModal] = useState(false);
+  const [newList, setNewList] = useState({ name: '', icon: '', color: '#fff7dc', items: [] });
+  const [newItemText, setNewItemText] = useState('');
+  const [selectedList, setSelectedList] = useState(null);
+
+  const handleDelete = (name) => {
+    setLists(lists.filter((list) => list.name !== name));
+  };
+
+  const handleSave = () => {
+    if (newList.name && newList.icon) {
+      setLists([...lists, { ...newList, itemCount: newList.items.length }]);
+      setNewList({ name: '', icon: '', color: '#fff7dc', items: [] });
+      setNewItemText('');
+      setShowModal(false);
+    } else {
+      alert('Please fill in all fields.');
+    }
+  };
+
+  const toggleItem = (index) => {
+    const updated = [...selectedList.items];
+    updated[index].done = !updated[index].done;
+    setSelectedList({ ...selectedList, items: updated });
+  };
+
+  const addItemToList = (text) => {
+    const updated = [...selectedList.items, { text, done: false }];
+    setSelectedList({ ...selectedList, items: updated });
+  };
+
+  const handleAddItemToNewList = () => {
+    if (newItemText.trim()) {
+      setNewList({
+        ...newList,
+        items: [...newList.items, { text: newItemText.trim(), done: false }]
       });
-
-      if (response.ok) {
-        const userList = await response.json();
-        console.log("Fetched Creator:", userList); // Debug log
-        setUser(userList.id); // Ensure the full UserDTO is set, including id
-      } else {
-        console.error("Failed to fetch current user.");
-        setUser(null); // No user logged in
-      }
-    } catch (error) {
-      console.error("Error refreshing user:", error);
-      setUser(null);
+      setNewItemText('');
     }
-  }
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleHeadingChange = (e) => {
-    setHeading(e.target.value);
-  };
-
-  const addNewItem = () => {
-    if (!inputValue.trim()) {
-      alert("You must write something!");
-      return;
-    }else{
-    const newIngredient = inputValue
-    setItems((preItems)=>[...preItems, newIngredient]);
-    setInputValue("");
-    
-    }
-    console.log(items);
-  };
-
-  const removeItem = (index) => {
-    setItems(items.filter((_, i) => i !== index));
-  };
-
-  const toggleChecked = (index) => {
-    const newItems = [...items];
-    newItems[index] = {
-      text: newItems[index].text || newItems[index],
-      checked: !newItems[index].checked,
-    };
-    setItems(newItems);
   };
 
   return (
-    <div className={styles.groceryBackground}>
-      <div className={styles.body} id={styles.rcorners2}>
-        <div id="myDIV" className={styles.header}>
-          {/* Editable Heading with Pencil Icon */}
-          {isEditingTitle ? (
+    <div className="lists-container">
+      <header className="lists-header">
+        <h1>My Lists</h1>
+        <button className="new-list-button" onClick={() => setShowModal(true)}>+ New List</button>
+      </header>
+
+      <section className="list-items">
+        {lists.map((list) => (
+          <div
+            className="list-card"
+            style={{ backgroundColor: list.color }}
+            key={list.name}
+            onClick={() => setSelectedList(list)}
+          >
+            <img src={list.icon} alt={list.name} className="list-icon" />
+            <div className="list-info">
+              <h3>{list.name}</h3>
+              <p>{list.itemCount} items</p>
+            </div>
+            <input type="checkbox" />
+            <button className="delete-button" onClick={(e) => { e.stopPropagation(); handleDelete(list.name); }}>🗑️</button>
+          </div>
+        ))}
+      </section>
+
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content add-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Add New List</h3>
+
+            {/* Tile Preview */}
+            <div
+              className="tile-preview"
+              style={{ backgroundColor: newList.color || '#fff7dc' }}
+            >
+              {newList.icon ? (
+                <img src={newList.icon} alt="preview" />
+              ) : (
+                <span>📝</span>
+              )}
+              <div style={{ fontSize: '0.9rem', marginTop: '0.4rem' }}>
+                {newList.name || 'List Name'}
+              </div>
+            </div>
+
             <input
               type="text"
-              value={heading}
-              onChange={handleHeadingChange}
-              onBlur={() => setIsEditingTitle(false)}
-              className={styles.editableTitle}
-              autoFocus
+              placeholder="List Name"
+              value={newList.name}
+              onChange={(e) => setNewList({ ...newList, name: e.target.value })}
             />
-          ) : (
-            <h2
-              onClick={() => setIsEditingTitle(true)}
-              className={styles.title}
-            >
-              {heading} <span className={styles.editIcon}>✏️</span>
-            </h2>
-          )}
 
-          <input
-            type="text"
-            id="myInput"
-            placeholder="Ingredient..."
-            value={inputValue}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
-          <span onClick={addNewItem} className={styles.addBtn}>
-            Add
-          </span>
+            <h4>Tile Color</h4>
+            <div className="tile-color-picker">
+              {["#ffe8a1", "#fff7dc", "#ffdccd", "#c0f0c2", "#d4f5a1"].map((color) => (
+                <div
+                  key={color}
+                  className={`color-option ${newList.color === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setNewList({ ...newList, color })}
+                />
+              ))}
+            </div>
+
+            <h4>Icon</h4>
+            <div className="icon-grid">
+              {[
+                '/icons/broom.png',
+                '/icons/meal.png',
+                '/icons/cart.png',
+                '/icons/pan.png',
+                '/icons/clipboard.png',
+                '/icons/chef.png'
+              ].map((iconPath) => (
+                <img
+                  key={iconPath}
+                  src={iconPath}
+                  alt="icon"
+                  onClick={() => setNewList({ ...newList, icon: iconPath })}
+                  style={{
+                    border: newList.icon === iconPath ? '2px solid #333' : '2px solid transparent'
+                  }}
+                />
+              ))}
+            </div>
+
+            <h4>List Items</h4>
+            <ul className="checklist">
+              {newList.items.map((item, idx) => (
+                <li key={idx}>
+                  <label>
+                    <input type="checkbox" checked={item.done} readOnly />
+                    <span>{item.text}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <input
+              type="text"
+              placeholder="New item"
+              value={newItemText}
+              onChange={(e) => setNewItemText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAddItemToNewList();
+              }}
+            />
+
+            <div className="modal-actions">
+              <button onClick={handleSave}>Save</button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
         </div>
+      )}
 
-        <ul id="myUL" className={styles.ul}>
-          {items.map((item, index) => (
-            <li
-              key={index}
-              className={item.checked ? styles.checked : ""}
-              onClick={() => toggleChecked(index)}
-            >
-              {item.text || item}
-              <span
-                className={styles.close}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeItem(index);
-                }}
-              >
-                &times;
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {selectedList && (
+        <div className="modal-overlay" onClick={() => setSelectedList(null)}>
+          <div className="modal-content add-modal" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setSelectedList(null)}>← Back</button>
+            <h2>{selectedList.name}</h2>
+            <ul className="checklist">
+              {selectedList.items.map((item, idx) => (
+                <li key={idx}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={item.done}
+                      onChange={() => toggleItem(idx)}
+                    />
+                    <span className={item.done ? 'done' : ''}>{item.text}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <input
+              type="text"
+              placeholder="New item"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  addItemToList(e.target.value);
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

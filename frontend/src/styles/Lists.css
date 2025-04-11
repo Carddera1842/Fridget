@@ -1,0 +1,232 @@
+/* Container */
+.lists-container {
+    background: #fef6e4;
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: sans-serif;
+  }
+  
+  /* Header */
+  .lists-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .lists-header h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .new-list-button {
+    background-color: #f4a261;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  
+  /* List Items */
+  .list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .list-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    gap: 1rem;
+  }
+  
+  .list-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .list-info {
+    flex: 1;
+  }
+  
+  .list-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  
+  .list-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .delete-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .modal-content.add-modal {
+    background: #fff8e1;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  
+  .modal-content input[type='text'] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+  
+  .tile-color-picker {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .color-option.selected {
+    border-color: #333;
+  }
+  
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .icon-grid img {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  
+  .icon-grid img:hover {
+    transform: scale(1.05);
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .modal-actions button {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #b5eadb;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .list-detail-view {
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
+  
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .checklist li {
+    margin: 0.5rem 0;
+  }
+  
+  .checklist input[type='checkbox'] {
+    margin-right: 0.5rem;
+  }
+  
+  .checklist .done {
+    text-decoration: line-through;
+    color: gray;
+  }
+  .tile-preview {
+    background: var(--preview-color, #fff7dc);
+    border-radius: 12px;
+    padding: 1rem;
+    width: 120px;
+    height: 120px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .tile-preview img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+  }
+  .add-modal h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .add-modal input[type='text'] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .checklist {
+    padding: 0;
+    list-style: none;
+    margin-bottom: 1rem;
+  }
+  
+  .checklist li {
+    display: flex;
+    align-items: center;
+    margin: 0.4rem 0;
+  }
+  
+  .checklist input[type='checkbox'] {
+    margin-right: 0.5rem;
+  }
+  
