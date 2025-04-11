@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './styles/Ingredients.css';
 
 import Ingredients from "./components/AddIngredients";
 import AddRecipe from "./components/AddRecipe";
@@ -9,14 +10,13 @@ import PasswordReset from "./components/PasswordReset";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import GroceryList from "./components/GroceryList";
-import UserProfile from "./components/UserProfile"; // Import
+import UserProfile from "./components/UserProfile";
 import Recipe from "./components/RecipeHub";
 import "bulma/css/bulma.min.css";
 import RecipeList from "./components/RecipeList";
 import RecipeAPI from "./components/RecipeAPI";
 import RecipeDetail from "./components/RecipeDetail";
 
-// Sample user data
 const user = {
   profilePicture: "https://img.freepik.com/free-vector/happy-cute-girl-chef-holding-bowl-with-whisk-banner-logo-cartoon-art-illustration_56104-786.jpg",
   username: "Lil' Chef",
@@ -34,16 +34,16 @@ const App = () => {
     try {
       const response = await fetch("http://localhost:8080/userservice/current-user", {
         method: "GET",
-        credentials: "include", // Ensures session cookies are sent
+        credentials: "include",
       });
 
       if (response.ok) {
         const userData = await response.json();
-        console.log("Fetched current user:", userData); // Debug log
-        setUser(userData); // Ensure the full UserDTO is set, including id
+        console.log("Fetched current user:", userData);
+        setUser(userData); 
       } else {
         console.error("Failed to fetch current user.");
-        setUser(null); // No user logged in
+        setUser(null);
       }
     } catch (error) {
       console.error("Error refreshing user:", error);
@@ -55,10 +55,10 @@ const App = () => {
     try {
       const response = await fetch("http://localhost:8080/userservice/logout", {
         method: "POST",
-        credentials: "include", // Ensures session cookies are sent
+        credentials: "include", 
       });
       if (response.ok) {
-        setUser(null); // Clear user state
+        setUser(null); 
       } else {
         console.error("Failed to log out");
       }
@@ -68,7 +68,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    refreshUser(); // Fetch user on app load
+    refreshUser(); 
   }, []);
 
   return (
@@ -87,7 +87,7 @@ const App = () => {
           <Route path="/add-recipe" element={<AddRecipe />} />
           <Route path="/recipelist" element={<RecipeList />} />
           <Route path="/recipes" element={<RecipeAPI />} />
-          <Route path="/recipe/:idMeal" element={<RecipeDetail />} /> {/* New route */}
+          <Route path="/recipe/:idMeal" element={<RecipeDetail />} /> 
         </Routes>
       </div>
     </Router>

@@ -38,7 +38,7 @@ const Navbar = ({ user, refreshUser }) => {
         </li>
         <li className={styles.navbarItem}>
           <Link to="/ingredients" className={styles.navbarLink}>
-            Ingredients
+            My Fridge
           </Link>
         </li>
         <li className={styles.navbarItem}>
@@ -53,7 +53,7 @@ const Navbar = ({ user, refreshUser }) => {
         </li>
         <li className={styles.navbarItem}>
           <Link to="/grocery-list" className={styles.navbarLink}>
-            Grocery List
+            My Lists
           </Link>
         </li>
         <li className={styles.navbarItem}>

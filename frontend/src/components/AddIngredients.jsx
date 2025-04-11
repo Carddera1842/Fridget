@@ -1,54 +1,227 @@
-import { useState } from "react";
-import "bulma/css/bulma.min.css";
+import React, { useState } from 'react';
+import '../styles/Ingredients.css';
 
-const AddIngredients = () => {
-  const [name, setName] = useState("");
+const initialIngredients = [
+  { name: 'Carrot', icon: '/icons/carrot.png', quantity: '2 whole' },
+  { name: 'Milk', icon: '/icons/milk.png', quantity: '1 cup' },
+  { name: 'Bell Pepper', icon: '/icons/bell-pepper.png', quantity: '1 sliced' },
+  { name: 'Cheese', icon: '/icons/cheese.png', quantity: '100g' },
+  { name: 'Eggs', icon: '/icons/eggs.png', quantity: '3' },
+  { name: 'Apple', icon: '/icons/apple.png', quantity: '2' },
+  { name: 'Broccoli', icon: '/icons/broccoli.png', quantity: '1 bunch' },
+  { name: 'Onion', icon: '/icons/onion.png', quantity: '1' },
+  { name: 'Spinach', icon: '/icons/spinach.png', quantity: '2 handfuls' },
+  { name: 'Chicken', icon: '/icons/chicken.png', quantity: '1 breast' },
+  { name: 'Tomato', icon: '/icons/tomato.png', quantity: '2' }
+];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const recipes = [
+  {
+    title: 'Spinach Frittata',
+    img: 'https://via.placeholder.com/150',
+    ingredients: '6 of 8',
+    time: '40 m',
+  },
+  {
+    title: 'Scrambled Eggs',
+    img: 'https://via.placeholder.com/150',
+    ingredients: '3 of 3',
+    time: '10 s',
+  },
+  {
+    title: 'Vegetable Stir Fry',
+    img: 'https://via.placeholder.com/150',
+    ingredients: '7 of 9',
+    time: '25 s',
+  },
+];
 
-    // Connect to the backend and send the ingredient name
-    const response = await fetch(`http://localhost:8080/ingredients/add`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name }),
-    });
+function AddIngredients() {
+  const [ingredients, setIngredients] = useState(initialIngredients);
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newIngredient, setNewIngredient] = useState({ name: '', icon: '', color: '' });
 
-    const result = await response.text();
-    alert(result);
+  const handleTileClick = (ingredient) => {
+    setSelectedIngredient(ingredient);
+  };
 
-    // Clear the input field after submission
-    setName("");
+  const closeModal = () => {
+    setSelectedIngredient(null);
+  };
+
+  const handleEdit = () => {
+    alert('Edit feature coming soon!');
+  };
+
+  const handleDelete = () => {
+    alert('Delete feature coming soon!');
+  };
+
+  const openAddModal = () => {
+    setShowAddModal(true);
+  };
+
+  const closeAddModal = () => {
+    setShowAddModal(false);
+    setNewIngredient({ name: '', icon: '', color: '' });
+  };
+
+  const handleSaveNewIngredient = () => {
+    if (newIngredient.name && newIngredient.icon) {
+      setIngredients([...ingredients, { ...newIngredient, quantity: '1' }]);
+      closeAddModal();
+    } else {
+      alert('Please fill out all fields');
+    }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="box">
-        <h2 className="title is-4 has-text-centered">Add New Ingredient</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="field is-grouped">
-            <div className="control is-expanded">
-              <input
-                className="input"
-                type="text"
-                placeholder="Enter ingredient name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+    <div className="fridge-container">
+      <header className="fridge-header">
+        <h1>My Fridge</h1>
+      </header>
+
+      <section className="ingredients-section">
+        <div className="ingredients-scroll">
+          {ingredients.map((item, idx) => (
+            <div key={idx} className="ingredient-tile" onClick={() => handleTileClick(item)} style={{ backgroundColor: item.color || '#fff5d7' }}>
+              <img className="ingredient-icon" src={item.icon} alt={item.name} />
+              <div className="ingredient-name">{item.name}</div>
             </div>
-            <div className="control">
-              <button type="submit" className="button is-primary">
-                Add Ingredient
-              </button>
+          ))}
+          <div className="ingredient-tile add-more" onClick={openAddModal}>+</div>
+        </div>
+      </section>
+
+      <section className="recipes-section">
+        <h2 className="fridge-header">Recipes You Can Make</h2>
+        <div className="recipes-list">
+          {recipes.map((recipe, idx) => (
+            <div key={idx} className="recipe-card">
+              <img src={recipe.img} alt={recipe.title} />
+              <h3>{recipe.title}</h3>
+              <p>You have {recipe.ingredients} ingredients</p>
+              <div className="recipe-footer">
+                <span>{recipe.time}</span>
+                <button>View Recipe</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {selectedIngredient && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{selectedIngredient.name}</h3>
+            <img className="modal-icon" src={selectedIngredient.icon} alt={selectedIngredient.name} />
+            <p><strong>Quantity:</strong> {selectedIngredient.quantity}</p>
+            <p><strong>Tags:</strong> Fresh, Organic</p>
+            <div className="modal-actions">
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleDelete}>Delete</button>
+              <button onClick={closeModal}>Close</button>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      )}
+
+      {showAddModal && (
+        <div className="modal-overlay" onClick={closeAddModal}>
+          <div className="modal-content add-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Add Ingredient</h3>
+
+            <div
+              className="tile-preview"
+              style={{ backgroundColor: newIngredient.color || '#fff1d6' }}
+            >
+              {newIngredient.icon ? (
+                <img src={newIngredient.icon} alt="preview" />
+              ) : (
+                <span>🍴</span> 
+              )}
+              <div style={{ fontSize: '0.9rem', marginTop: '0.4rem' }}>
+                {newIngredient.name || 'Name'}
+              </div>
+            </div>
+
+            <h4>Tile Color</h4>
+            <div className="tile-color-picker">
+              {['#fff1d6', '#ffe4e1', '#fffac8', '#f0e1ff', '#d7f7e4'].map((color) => (
+                <div
+                  key={color}
+                  className={`color-option ${
+                    newIngredient.color === color ? 'selected' : ''
+                  }`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setNewIngredient({ ...newIngredient, color })}
+                />
+              ))}
+            </div>
+
+            <h4>Ingredient Name</h4>
+            <input
+              type="text"
+              placeholder="e.g. Banana"
+              value={newIngredient.name}
+              onChange={(e) =>
+                setNewIngredient({ ...newIngredient, name: e.target.value })
+              }
+            />
+
+            <h4>Icon</h4>
+            <div className="icon-grid">
+              {[
+                '/icons/apple.png',
+                '/icons/banana.png',
+                '/icons/bell-pepper.png',
+                '/icons/bread.png',
+                '/icons/broccoli.png',
+                '/icons/carrot.png',
+                '/icons/cheese.png',
+                '/icons/chicken.png',
+                '/icons/chili.png',
+                '/icons/eggs.png',
+                '/icons/instant-noodles.png',
+                '/icons/lettuce.png',
+                '/icons/milk.png',
+                '/icons/onion.png',
+                '/icons/pasta.png',
+                '/icons/potato.png',
+                '/icons/spinach.png',
+                '/icons/strawberry.png',
+                '/icons/sugar.png',
+                '/icons/sweet-potato.png',
+                '/icons/tomato.png',
+              ].map((iconPath) => (
+                <img
+                  key={iconPath}
+                  src={iconPath}
+                  alt="icon"
+                  onClick={() =>
+                    setNewIngredient({ ...newIngredient, icon: iconPath })
+                  }
+                  style={{
+                    border:
+                      newIngredient.icon === iconPath
+                        ? '2px solid #333'
+                        : '2px solid transparent',
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Actions */}
+            <div className="modal-actions" style={{ marginTop: '1rem' }}>
+              <button onClick={handleSaveNewIngredient}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
-};
+}
 
 export default AddIngredients;
