@@ -4,7 +4,7 @@ import '../styles/Lists.css';
 const initialLists = [
   {
     name: 'Weekly Chores',
-    icon: '/icons/broom.png',
+    icon: 'listIcons/broom.png',
     itemCount: 2,
     color: '#ffe8a1',
     items: [
@@ -14,7 +14,7 @@ const initialLists = [
   },
   {
     name: 'Meal Prep',
-    icon: '/icons/meal.png',
+    icon: 'listIcons/meal-prep.png',
     itemCount: 5,
     color: '#d4f5a1',
     items: [
@@ -73,9 +73,14 @@ export default function ListsPage() {
   return (
     <div className="lists-container">
       <header className="lists-header">
-        <h1>My Lists</h1>
-        <button className="new-list-button" onClick={() => setShowModal(true)}>+ New List</button>
+        <h1><b>My Lists</b></h1>
+        
       </header>
+      <div className='list-button'>
+        <button className="new-list-button" onClick={() => setShowModal(true)}>+ New List</button>
+      </div>
+      
+      
 
       <section className="list-items">
         {lists.map((list) => (
@@ -99,84 +104,111 @@ export default function ListsPage() {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content add-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Add New List</h3>
+            <h3><b>Add New List</b></h3>
 
-            {/* Tile Preview */}
-            <div
-              className="tile-preview"
-              style={{ backgroundColor: newList.color || '#fff7dc' }}
-            >
-              {newList.icon ? (
-                <img src={newList.icon} alt="preview" />
-              ) : (
-                <span>📝</span>
-              )}
-              <div style={{ fontSize: '0.9rem', marginTop: '0.4rem' }}>
-                {newList.name || 'List Name'}
+            <div className="modal-grid">
+              <div className="modal-left">
+                <div
+                  className="tile-preview"
+                  style={{ backgroundColor: newList.color || '#fff7dc' }}
+                >
+                  {newList.icon ? (
+                    <img src={newList.icon} alt="preview" />
+                  ) : (
+                    <span>📝</span>
+                  )}
+                  <div style={{ fontSize: '0.9rem', marginTop: '0.4rem' }}>
+                    {newList.name || <b>List Name</b>}
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="List Name"
+                  value={newList.name}
+                  onChange={(e) => setNewList({ ...newList, name: e.target.value })}
+                />
+
+                <h4>Tile Color</h4>
+                <div className="tile-color-picker">
+                  {["#ffe893", "#dbebac", "#bae7e1", "#ffdfa4", "#fed9bb"].map((color) => (
+                    <div
+                      key={color}
+                      className={`color-option ${newList.color === color ? 'selected' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => setNewList({ ...newList, color })}
+                    />
+                  ))}
+                </div>
+
+                <h4>Icon</h4>
+                <div className="icon-grid">
+                  {[
+                    '/listIcons/broom.png',
+                    '/listIcons/meal-prep.png',
+                    '/listIcons/cart.png',
+                    '/listIcons/pan.png',
+                    '/listIcons/clipboard.png',
+                    '/listIcons/chef.png'
+                  ].map((iconPath) => (
+                    <img
+                      key={iconPath}
+                      src={iconPath}
+                      alt="icon"
+                      onClick={() => setNewList({ ...newList, icon: iconPath })}
+                      style={{
+                        border: newList.icon === iconPath ? '2px solid #333' : '2px solid transparent'
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-right">
+                <h4>List Items</h4>
+                <div className="item-preview-box">
+                <ul className="checklist">
+                  {newList.items.map((item, idx) => (
+                    <li key={idx} style={{ backgroundColor: newList.color }} className="checklist-item">
+                      <input
+                        type="checkbox"
+                        checked={item.done}
+                        readOnly
+                      />
+                      <input
+                        type="text"
+                        value={item.text}
+                        onChange={(e) => {
+                          const updatedItems = [...newList.items];
+                          updatedItems[idx].text = e.target.value;
+                          setNewList({ ...newList, items: updatedItems });
+                        }}
+                        className="list-item-input"
+                        placeholder="List item"
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <div
+  className="checklist-item add-item-tile"
+  onClick={() => {
+    setNewList({
+      ...newList,
+      items: [...newList.items, { text: '', done: false }]
+    });
+  }}
+>
+  + Add Item
+</div>
+
+
+                </div>
+                
+
+
+
               </div>
             </div>
-
-            <input
-              type="text"
-              placeholder="List Name"
-              value={newList.name}
-              onChange={(e) => setNewList({ ...newList, name: e.target.value })}
-            />
-
-            <h4>Tile Color</h4>
-            <div className="tile-color-picker">
-              {["#ffe8a1", "#fff7dc", "#ffdccd", "#c0f0c2", "#d4f5a1"].map((color) => (
-                <div
-                  key={color}
-                  className={`color-option ${newList.color === color ? 'selected' : ''}`}
-                  style={{ backgroundColor: color }}
-                  onClick={() => setNewList({ ...newList, color })}
-                />
-              ))}
-            </div>
-
-            <h4>Icon</h4>
-            <div className="icon-grid">
-              {[
-                '/icons/broom.png',
-                '/icons/meal.png',
-                '/icons/cart.png',
-                '/icons/pan.png',
-                '/icons/clipboard.png',
-                '/icons/chef.png'
-              ].map((iconPath) => (
-                <img
-                  key={iconPath}
-                  src={iconPath}
-                  alt="icon"
-                  onClick={() => setNewList({ ...newList, icon: iconPath })}
-                  style={{
-                    border: newList.icon === iconPath ? '2px solid #333' : '2px solid transparent'
-                  }}
-                />
-              ))}
-            </div>
-
-            <h4>List Items</h4>
-            <ul className="checklist">
-              {newList.items.map((item, idx) => (
-                <li key={idx}>
-                  <label>
-                    <input type="checkbox" checked={item.done} readOnly />
-                    <span>{item.text}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-            <input
-              type="text"
-              placeholder="New item"
-              value={newItemText}
-              onChange={(e) => setNewItemText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleAddItemToNewList();
-              }}
-            />
 
             <div className="modal-actions">
               <button onClick={handleSave}>Save</button>

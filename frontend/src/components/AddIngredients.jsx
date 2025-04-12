@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import '../styles/Ingredients.css';
 
 const initialIngredients = [
-  { name: 'Carrot', icon: '/icons/carrot.png', quantity: '2 whole' },
-  { name: 'Milk', icon: '/icons/milk.png', quantity: '1 cup' },
-  { name: 'Bell Pepper', icon: '/icons/bell-pepper.png', quantity: '1 sliced' },
-  { name: 'Cheese', icon: '/icons/cheese.png', quantity: '100g' },
-  { name: 'Eggs', icon: '/icons/eggs.png', quantity: '3' },
-  { name: 'Apple', icon: '/icons/apple.png', quantity: '2' },
-  { name: 'Broccoli', icon: '/icons/broccoli.png', quantity: '1 bunch' },
-  { name: 'Onion', icon: '/icons/onion.png', quantity: '1' },
-  { name: 'Spinach', icon: '/icons/spinach.png', quantity: '2 handfuls' },
-  { name: 'Chicken', icon: '/icons/chicken.png', quantity: '1 breast' },
-  { name: 'Tomato', icon: '/icons/tomato.png', quantity: '2' }
+  { name: 'Carrot', icon: '/ingredientIcons/carrot.png', quantity: '2 whole' },
+  { name: 'Milk', icon: '/ingredientIcons/milk.png', quantity: '1 cup' },
+  { name: 'Bell Pepper', icon: '/ingredientIcons/bell-pepper.png', quantity: '1 sliced' },
+  { name: 'Cheese', icon: '/ingredientIcons/cheese.png', quantity: '100g' },
+  { name: 'Eggs', icon: '/ingredientIcons/eggs.png', quantity: '3' },
+  { name: 'Apple', icon: '/ingredientIcons/apple.png', quantity: '2' },
+  { name: 'Broccoli', icon: '/ingredientIcons/broccoli.png', quantity: '1 bunch' },
+  { name: 'Onion', icon: '/ingredientIcons/onion.png', quantity: '1' },
+  { name: 'Spinach', icon: '/ingredientIcons/spinach.png', quantity: '2 handfuls' },
+  { name: 'Chicken', icon: '/ingredientIcons/chicken.png', quantity: '1 breast' },
+  { name: 'Tomato', icon: '/ingredientIcons/tomato.png', quantity: '2' }
 ];
 
 const recipes = [
@@ -79,7 +79,7 @@ function AddIngredients() {
   return (
     <div className="fridge-container">
       <header className="fridge-header">
-        <h1>My Fridge</h1>
+        <h1><b>My Fridge</b></h1>
       </header>
 
       <section className="ingredients-section">
@@ -173,27 +173,27 @@ function AddIngredients() {
             <h4>Icon</h4>
             <div className="icon-grid">
               {[
-                '/icons/apple.png',
-                '/icons/banana.png',
-                '/icons/bell-pepper.png',
-                '/icons/bread.png',
-                '/icons/broccoli.png',
-                '/icons/carrot.png',
-                '/icons/cheese.png',
-                '/icons/chicken.png',
-                '/icons/chili.png',
-                '/icons/eggs.png',
-                '/icons/instant-noodles.png',
-                '/icons/lettuce.png',
-                '/icons/milk.png',
-                '/icons/onion.png',
-                '/icons/pasta.png',
-                '/icons/potato.png',
-                '/icons/spinach.png',
-                '/icons/strawberry.png',
-                '/icons/sugar.png',
-                '/icons/sweet-potato.png',
-                '/icons/tomato.png',
+                '/ingredientIcons/apple.png',
+                '/ingredientIcons/banana.png',
+                '/ingredientIcons/bell-pepper.png',
+                '/ingredientIcons/bread.png',
+                '/ingredientIcons/broccoli.png',
+                '/ingredientIcons/carrot.png',
+                '/ingredientIcons/cheese.png',
+                '/ingredientIcons/chicken.png',
+                '/ingredientIcons/chili.png',
+                '/ingredientIcons/eggs.png',
+                '/ingredientIcons/instant-noodles.png',
+                '/ingredientIcons/lettuce.png',
+                '/ingredientIcons/milk.png',
+                '/ingredientIcons/onion.png',
+                '/ingredientIcons/pasta.png',
+                '/ingredientIcons/potato.png',
+                '/ingredientIcons/spinach.png',
+                '/ingredientIcons/strawberry.png',
+                '/ingredientIcons/sugar.png',
+                '/ingredientIcons/sweet-potato.png',
+                '/ingredientIcons/tomato.png',
               ].map((iconPath) => (
                 <img
                   key={iconPath}
@@ -212,7 +212,6 @@ function AddIngredients() {
               ))}
             </div>
 
-            {/* Actions */}
             <div className="modal-actions" style={{ marginTop: '1rem' }}>
               <button onClick={handleSaveNewIngredient}>Save</button>
             </div>
